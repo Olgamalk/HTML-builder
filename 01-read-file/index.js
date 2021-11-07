@@ -1,7 +1,11 @@
 const fs = require('fs');
+const path = require('path');
+const { stdout } = require('process');
 
-fs.readFile('text.txt', 'utf8',
-    function(error, data) {
-        if(error) throw error;
-        console.log(data);
+const stream = new fs.ReadStream(path.join(__dirname, 'text.txt'));
+
+stream.on('readable', function () {
+  let data = stream.read();
+  stdout.write(data);
+  process.exit();
 });
