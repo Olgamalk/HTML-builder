@@ -1,17 +1,21 @@
-let fs = require('fs');
-let readline = require('readline');
+const fs = require('fs');
+const path = require('path');
+// const process = require('process');
+const readline = require('readline');
+const { stdin: input, stdout: output } = require('process');
+const rl = readline.createInterface({ input, output });
+const file = fs.createWriteStream(path.join(__dirname, 'text.txt'), 'utf-8');
 
-let rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
+console.log(`Please enter text to the text.txt file. If you want to end, enter 'exit' or add Ctrl+C`);
+
+process.on('exit', () => {
+    console.log(`\nFile was created and your text was added.`);
 });
 
-let writeableStream = fs.createWriteStream("some.txt");
-writeableStream.write('Hello world!');
-writeableStream.end('End!');
-
-rl.question('What do you add in the file?', function(answer) {
-    console.log('Thanks for your answer:', answer);
-
-    rl.close();
+rl.on('line', (line) => {
+    if (line.toLowerCase() == 'exit') {
+        rl.close();
+    } else {
+        file.write(line + '\n');
+    }
 })
