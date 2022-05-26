@@ -52,30 +52,30 @@ fs.readFile(path.join(__dirname, 'template.html'), 'utf-8', (err, template) => {
    } else {
       fs.writeFile(path.join(dist, 'index.html'), template, 'utf-8', (err) => {
          if(err) throw err;
-      });
-      fs.readFile(path.join(dist, 'index.html'), 'utf-8', (err, dataHTML) => {
-         if(err) {
-            throw err;
-         } else {
-            fs.readdir(components, (err, files) => {
-               if(err) {
-                  throw err;
-               } else {
-                  files.forEach(file => {
-                     let filePath = path.join(components, file);
-                     let fileName = file.split('.')[0];
-                     fs.readFile(filePath, 'utf-8', (err, data) => {
-                        if (err) throw err;
-                        dataHTML = dataHTML.replace(new RegExp(`{{${fileName}}}`, 'g'), data);
-                        fs.writeFile(path.join(dist, 'index.html'), dataHTML, 'utf-8', (err) => {
-                           if(err) throw err;
+         fs.readFile(path.join(dist, 'index.html'), 'utf-8', (err, dataHTML) => {
+            if(err) {
+               throw err;
+            } else {
+               fs.readdir(components, (err, files) => {
+                  if(err) {
+                     throw err;
+                  } else {
+                     files.forEach(file => {
+                        let filePath = path.join(components, file);
+                        let fileName = file.split('.')[0];
+                        fs.readFile(filePath, 'utf-8', (err, data) => {
+                           if (err) throw err;
+                           dataHTML = dataHTML.replace(new RegExp(`{{${fileName}}}`, 'g'), data);
+                           fs.writeFile(path.join(dist, 'index.html'), dataHTML, 'utf-8', (err) => {
+                              if(err) throw err;
+                           })
                         })
                      })
-                  })
-               }
-            })
-         }
-      })
+                  }
+               })
+            }
+         })
+      });
    }   
 });
 
